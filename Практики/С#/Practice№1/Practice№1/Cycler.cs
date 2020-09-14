@@ -6,45 +6,51 @@ namespace Practice_1
 {
     class Cycler
     {
+        private const int destination=10000;
         private static int countCyclist;
         private static int countRaceCyclist;
         private string name;
         private string surname;
         private int age;
         private string country;
-        private static Bicycle[] bicycle=new Bicycle[5];
-        private Bicycle personalBicycle;
-        private static int CountBicycle=0;
+        private  Bicycle[] bicycle=new Bicycle[5];
+        private  int countBicycle=0;
         private int averageSpeed;
+        private bool OnRace=false;
 
+        public int Age { get => age; set => age = value; }
+        public string Surname { get => surname; set => surname = value; }
+        public string Name { get => name; set => name = value; }
+        public string Country { get => country; set => country = value; }
 
         private Cycler()
         {
+            Console.WriteLine("Участник добавлен");
             countCyclist++;
         }
-        public Cycler(string Name, string Surname, int Age, string Country, Bicycle NewBicycle, int AverageSpeed) :this(Surname,  Age,  Country, NewBicycle, AverageSpeed)
+        public Cycler(string Name, string Surname, int Age, string Country, string NameBike, int MaxSpeedBike, int PriceBike, int AverageSpeed) :this(Surname,  Age,  Country, NameBike, MaxSpeedBike,  PriceBike, AverageSpeed)
         {
-            this.name = Name;
+            this.Name = Name;
         }
-        private Cycler(string Surname, int Age,  string Country, Bicycle NewBicycle, int AverageSpeed) : this( Age, Country, NewBicycle, AverageSpeed)
+        private Cycler(string Surname, int Age,  string Country, string NameBike, int MaxSpeedBike, int PriceBike, int AverageSpeed) : this( Age, Country, NameBike, MaxSpeedBike, PriceBike, AverageSpeed)
         {
-            this.surname = Surname;
-        }
-
-        private Cycler(int Age,string Country, Bicycle NewBicycle, int AverageSpeed) : this(Country, NewBicycle, AverageSpeed)
-        {
-            this.age = Age;
+            this.Surname = Surname;
         }
 
-        private Cycler(string Country, Bicycle NewBicycle, int AverageSpeed) : this(NewBicycle, AverageSpeed)
+        private Cycler(int Age,string Country, string NameBike, int MaxSpeedBike, int PriceBike, int AverageSpeed) : this(Country, NameBike, MaxSpeedBike, PriceBike, AverageSpeed)
         {
-            this.country = Country;
+            this.Age = Age;
         }
-        private Cycler(Bicycle NewBicycle, int AverageSpeed) : this(AverageSpeed)
+
+        private Cycler(string Country, string NameBike, int MaxSpeedBike, int PriceBike, int AverageSpeed) : this(NameBike, MaxSpeedBike, PriceBike, AverageSpeed)
         {
-            bicycle[CountBicycle]= NewBicycle;
-            this.personalBicycle = NewBicycle;
-            CountBicycle++;
+            this.Country = Country;
+        }
+        private Cycler(string NameBike,int MaxSpeedBike,int PriceBike , int AverageSpeed) : this(AverageSpeed)
+        {
+            bicycle[countBicycle] = new Bicycle(NameBike,MaxSpeedBike,PriceBike);
+            
+            countBicycle++;
         }
         private Cycler(int AverageSpeed) : this()
         {
@@ -52,28 +58,44 @@ namespace Practice_1
             this.averageSpeed = AverageSpeed;
         }
 
-        public void ShowCountCyclist()
+        public static void ShowCountCyclist()
         {
             Console.WriteLine("Участников гонки "+ countCyclist);
+            
+        }
+       
+
+        public  void GoIn()
+        {
+            if (this.OnRace == false)
+            {
+                countRaceCyclist++;
+            }
+            else
+            {
+                Console.WriteLine("Велосипедист уже на трассе");
+            }
+            Console.WriteLine($"Количество участников на трассе {countRaceCyclist}");
+
         }
 
-        public void GoIn()
+        public  void GoOut()
         {
-            countRaceCyclist++;
-            Console.WriteLine($"Количество участников в гонке {countRaceCyclist}");
-
+            if (this.OnRace==true)
+            {
+                countRaceCyclist--;
+            }
+            else
+            {
+                Console.WriteLine("Велосипедист уже не на трассе");
+            }
+            Console.WriteLine($"Количество участников на трассе {countRaceCyclist}");
+         
         }
 
-        public void GoOut()
+        public void AddBicycle(string Name,int MaxSpeed,int Price)
         {
-            countRaceCyclist--;
-            Console.WriteLine($"Количество участников в гонке {countRaceCyclist}");
-
-        }
-
-        public void AddBicycle(Bicycle NewBicycle)
-        {
-            if (CountBicycle == 4) 
+            if (countBicycle > 5) 
             {
 
                 Console.WriteLine("Нельзя добавить новые велосипеды");
@@ -81,20 +103,38 @@ namespace Practice_1
             else
             {
 
-                bicycle[CountBicycle] = NewBicycle;
-                CountBicycle++;
+                bicycle[countBicycle] = new Bicycle(Name,MaxSpeed,Price);
+                countBicycle++;
             }
            
         }
-
-        public void Finish(Cycler [] CyclerArray)
+        public  void ShowCycleArray()
         {
-            foreach(var b in CyclerArray)
-            {
-                Console.WriteLine($"Время пройденное велосипидистом {b.name} равно {(10000/Math.Pow(b.age,2))/(b.personalBicycle.)}");
-            }
+            
+             Console.WriteLine($"Имя  и Фамилия {this.Name} {this.Surname} \n Возраст {this.Age} \n Страна {this.Country} \n Велосипеды ");
+                for(int i =0; i < countBicycle; i++)
+                {
+                ShowBicycle(bicycle[i]);
+                }
+             
+            
+        
+        }
+     
+        public  double Finish()
+        {
+            this.GoOut();
+            return (destination/Math.Pow(Age,2))/(bicycle[0].MaxSpeed * averageSpeed);
+
+            
+         
+            
         }
 
+        void ShowBicycle(Bicycle BikeName)
+        {
+            Console.WriteLine($"Название {BikeName.Name}  Скорость {BikeName.MaxSpeed} Цена {BikeName.Price}");
 
+        }
     }
 }
