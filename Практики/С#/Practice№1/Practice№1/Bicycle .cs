@@ -10,14 +10,14 @@ namespace Practice_1
         private int maxSpeed;
         private int price;
 
-        public Bicycle(string NewName,int NewMaxSpeed,int NewPrice)
+        public Bicycle(string NewName, int NewMaxSpeed, int NewPrice)
         {
             this.Name = NewName;
             this.MaxSpeed = NewMaxSpeed;
             this.Price = NewPrice;
 
         }
-       
+
 
         public string Name { get => name; private set => name = value; }
         public int Price { get => price; private set => price = value; }

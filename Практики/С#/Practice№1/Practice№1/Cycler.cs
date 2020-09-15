@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace Practice_1
@@ -18,10 +19,11 @@ namespace Practice_1
         private int averageSpeed;
         private bool OnRace = false;
 
-        public int Age { get => age; set => age = value; }
-        public string Surname { get => surname; set => surname = value; }
-        public string Name { get => name; set => name = value; }
+        public int Age { get => age; private set => age = value; }
+        public string Surname { get => surname; private set => surname = value; }
+        public string Name { get => name; private set => name = value; }
         public string Country { get => country; set => country = value; }
+        public int AverageSpeed { get => averageSpeed; set => averageSpeed = value; }
 
         private Cycler()
         {
@@ -55,16 +57,15 @@ namespace Practice_1
         private Cycler(int AverageSpeed) : this()
         {
 
-            this.averageSpeed = AverageSpeed;
+            this.AverageSpeed = AverageSpeed;
         }
 
         public static void ShowCountCyclist()
         {
             Console.WriteLine("Участников гонки " + countCyclist);
-
         }
 
-        public void GoIn()
+        public int GoIn()
         {
             if (this.OnRace == false)
             {
@@ -75,13 +76,13 @@ namespace Practice_1
             {
                 Console.WriteLine("Велосипедист уже на трассе");
             }
-            Console.WriteLine($"Количество участников на трассе {countRaceCyclist}");
+           return countRaceCyclist;
 
         }
 
-        public void GoOut()
+        public int GoOut()
         {
-            if (this.OnRace == true)
+            if (this.OnRace)
             {
                 countRaceCyclist--;
                 this.OnRace = false;
@@ -90,7 +91,7 @@ namespace Practice_1
             {
                 Console.WriteLine("Велосипедист уже не на трассе");
             }
-            Console.WriteLine($"Количество участников на трассе {countRaceCyclist}");
+            return countRaceCyclist;
 
         }
 
@@ -110,7 +111,9 @@ namespace Practice_1
         public void ShowCycleArray()
         {
 
-            Console.WriteLine($"Имя и Фамилия {this.Name} {this.Surname} \n Возраст {this.Age} \n Страна {this.Country} \n Велосипеды ");
+            Console.WriteLine($"Имя и Фамилия {this.Name} {this.Surname} \n " +
+                $"Возраст {this.Age} \n " +
+                $"Страна {this.Country} \n Велосипеды ");
             for (int i = 0; i < countBicycle; i++)
             {
                 ShowBicycle(bicycle[i]);
@@ -120,13 +123,19 @@ namespace Practice_1
 
         public double Finish()
         {
-            this.GoOut();
-            return (destination / Math.Pow(Age, 2)) / (bicycle[0].MaxSpeed * averageSpeed);
-
+            if (this.OnRace == true) {
+                this.GoOut();
+                return (destination / Math.Pow(Age, 2)) / (bicycle[0].MaxSpeed * AverageSpeed);
+            }
+            else
+            {
+                Console.WriteLine($"Этот велосипедист не на трассе ");
+                return 0;
+            }
 
         }
 
-        void ShowBicycle(Bicycle BikeName)
+        private void ShowBicycle(Bicycle BikeName)
         {
             Console.WriteLine($"Название {BikeName.Name}  Скорость {BikeName.MaxSpeed} Цена {BikeName.Price}");
 
